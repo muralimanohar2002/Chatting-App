@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Break</string>
+    <string name="profile">Profile</string>
+    <string name="please_set_your_name_and_a_profile_picture">Please set your name and a profile picture</string>
+    <string name="enter_your_full_name">Enter your Full name</string>
+    <string name="save_info">SAVE INFO</string>
+    <string name="user_info">USER INFO</string>
+    <string name="phone_number_verification">Phone Number Verification</string>
+    <string name="break_will_send_an_otp_to_registered_phone_number">BREAK will send an OTP to registered Phone Number</string>
+    <string name="tap_on_image_icon_to_upload_profile_picture">Tap on image icon to upload Profile Picture</string>
+    <string name="crew">Crew</string>
+    <string name="invites">Invites</string>
+    <string name="settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="type_a_message">Type a message...</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/crew"
+        android:title="@string/crew" />
+    <item
+        android:id="@+id/invite"
+        android:title="@string/invites" />
+    <item
+        android:id="@+id/setting"
+        android:title="@string/settings" />
+</menu>

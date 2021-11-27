@@ -17,9 +17,11 @@ public class SplashScreen extends AppCompatActivity {
 
         if(auth.getCurrentUser()!=null){
             startActivity(new Intent(SplashScreen.this,MainActivity.class));
+            finishAffinity();
         }
         else{
             startActivity(new Intent(SplashScreen.this,PhoneNumber.class));
+            finishAffinity();
         }
     }
 }

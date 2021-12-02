@@ -1,6 +1,5 @@
 ---
 name: "Report bug in existing app"
-about: "Report a bug in one of the existing app"
 title: "[Bug] <APP NAME> - <SUMMARY>"
 labels: bug
 ---

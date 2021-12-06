@@ -92,6 +92,9 @@ public class InboxView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String chat = binding.messagebox.getText().toString();
+                if(chat.length() == 0){
+                    return;
+                }
                 Date date = new Date();
                 messageInbox message = new messageInbox(sender_uid, chat, date.getTime());
                 binding.messagebox.setText("");

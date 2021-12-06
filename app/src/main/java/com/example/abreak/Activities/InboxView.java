@@ -68,7 +68,25 @@ public class InboxView extends AppCompatActivity {
         binding.inboxRecyclerview.setAdapter(messageAdapter);
         binding.inboxRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
+        database.getReference().child("chats")
+                .child(sender)
+                .child("messages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messages.clear();
+                for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                    messageInbox newChat = snapshot1.getValue(messageInbox.class);
+                    newChat.setMessageId(snapshot1.getKey());
+                    messages.add(newChat);
+                }
+                messageAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         binding.send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,25 +96,7 @@ public class InboxView extends AppCompatActivity {
                 messageInbox message = new messageInbox(sender_uid, chat, date.getTime());
                 binding.messagebox.setText("");
 
-                database.getReference().child("chats")
-                        .child(sender)
-                        .child("messages").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        messages.clear();
-                        for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                            messageInbox newChat = snapshot1.getValue(messageInbox.class);
-                            newChat.setMessageId(snapshot1.getKey());
-                            messages.add(newChat);
-                        }
-                        messageAdapter.notifyDataSetChanged();
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
 
 
                 String key = database.getReference().push().getKey();

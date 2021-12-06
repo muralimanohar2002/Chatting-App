@@ -54,7 +54,7 @@ public class OTPaction extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
 //                        fauth.signInWithCredential(phoneAuthCredential);
-                        Toast.makeText(getApplicationContext(), "Completed", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "Completed", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

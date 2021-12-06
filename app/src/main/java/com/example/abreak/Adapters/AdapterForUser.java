@@ -2,6 +2,7 @@ package com.example.abreak.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class AdapterForUser extends RecyclerView.Adapter<AdapterForUser.friendViewHolder> {
@@ -58,6 +62,36 @@ public class AdapterForUser extends RecyclerView.Adapter<AdapterForUser.friendVi
                             long  recentmsgTime = snapshot.child("recentmsgTime").getValue(Long.class);
 
                             holder.binding.convo.setText(recentmsg);
+
+                        // Adding Display time method
+                        // Compare last message timing with today date
+
+                            // Fetching Message date
+                            Date date = new Date(recentmsgTime);
+                            DateFormat dateFormatter = new SimpleDateFormat("dd");
+                            int messageDate = Integer.parseInt(dateFormatter.format(date));
+
+                            // Fetching today's Date
+                            long CurrentTime = System.currentTimeMillis();
+                            Date todayDateFormatter = new Date(CurrentTime);
+                            int todayDate = Integer.parseInt(dateFormatter.format(todayDateFormatter));
+
+                        // Comparing Dates
+                            if(messageDate==todayDate){
+                                // Today's message : Display only time
+                                DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                                holder.binding.time.setText(timeFormat.format(date));
+                            }
+                            else if(messageDate == todayDate-1){
+                                // Yesterday's Message : Display "Yesterday"
+                                holder.binding.time.setText("Yesterday");
+                            }
+                            else{
+                                // Long gap : Display message Date for long gap
+                                DateFormat longDateFormat = new SimpleDateFormat("dd/MM/yy");
+                                holder.binding.time.setText(longDateFormat.format(date));
+                            }
+
                         }
                         else holder.binding.convo.setText("Tap to chat");
 

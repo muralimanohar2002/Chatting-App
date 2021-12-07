@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MessageAdapter extends RecyclerView.Adapter {
 
@@ -94,19 +95,27 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             newMessage.setFeelings(positioning);
 
+        // HashMap to update/add(if not present) reaction field in message model
+            HashMap<String, Object> update = new HashMap<>();
+            update.put("feelings", Long.valueOf(positioning));
+
+        // Changed setValue to updateChildren to reduce time (Complete message update) and reduce data transfter
+        // Can reduce cost/expense in production app too
             FirebaseDatabase.getInstance().getReference()
                     .child("chats")
                     .child(sender)
                     .child("messages")
                     .child(newMessage.getMessageId())
-                    .setValue(newMessage);
+                    .updateChildren(update);
+//                    .setValue(newMessage);
 
             FirebaseDatabase.getInstance().getReference()
                     .child("chats")
                     .child(receiver)
                     .child("messages")
                     .child(newMessage.getMessageId())
-                    .setValue(newMessage);
+                    .updateChildren(update);
+//                    .setValue(newMessage);
 
 
             return true; // true is closing popup, false is requesting a new selection

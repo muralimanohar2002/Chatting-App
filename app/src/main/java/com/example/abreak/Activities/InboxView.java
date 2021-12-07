@@ -140,7 +140,10 @@ public class InboxView extends AppCompatActivity {
                     newChat.setMessageId(snapshot1.getKey());
                     messages.add(newChat);
                 }
-                messageAdapter.notifyDataSetChanged();
+//                messageAdapter.notifyDataSetChanged();
+                // Changed to solve Query#4
+                messageAdapter = new MessageAdapter(InboxView.this, messages, sender, receiver);
+                binding.inboxRecyclerview.setAdapter(messageAdapter);
             }
 
             @Override

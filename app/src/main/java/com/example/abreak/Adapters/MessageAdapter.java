@@ -79,15 +79,17 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReactionPopup popup = new ReactionPopup(context, config, (positioning) -> {
             if(holder.getClass() == sentViewHolder.class){
                 sentViewHolder viewHolder = (sentViewHolder)holder;
-                viewHolder.binding.feelingFromSender.setImageResource(reactions[positioning]);
-
-                viewHolder.binding.feelingFromSender.setVisibility(View.VISIBLE);
+                if(positioning>=0) {
+                    viewHolder.binding.feelingFromSender.setImageResource(reactions[positioning]);
+                    viewHolder.binding.feelingFromSender.setVisibility(View.VISIBLE);
+                }
             }
             else{
                 receiveViewHolder viewHolder = (receiveViewHolder)holder;
-                viewHolder.binding.feelingFrom.setImageResource(reactions[positioning]);
-
-                viewHolder.binding.feelingFrom.setVisibility(View.VISIBLE);
+                if(positioning>=0) {
+                    viewHolder.binding.feelingFrom.setImageResource(reactions[positioning]);
+                    viewHolder.binding.feelingFrom.setVisibility(View.VISIBLE);
+                }
             }
 
             newMessage.setFeelings(positioning);

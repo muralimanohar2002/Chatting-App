@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Replaced tools:text to tools:text to remove dummy data to display on opening app-->
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        tools:text="Friend"
+        android:text="Friend"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -34,19 +32,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        tools:text="Sample chat with friend"
+        android:text="Sample chat with friend"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/friend"
         app:layout_constraintTop_toBottomOf="@+id/friend" />
 
-<!--    Set Visibility to "visible" and increased marginTop to "26dp"-->
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        tools:text="05:00 PM"
-        android:visibility="visible"
+        android:layout_marginTop="16dp"
+        android:text="05:00 PM"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -42,9 +42,6 @@ public class InboxView extends AppCompatActivity {
     String receiver_uid;
     ProgressDialog dial;
     String sender_uid;
-    private ArrayList<messageInbox> messages = new ArrayList<>();
-    private MessageAdapter messageAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +62,13 @@ public class InboxView extends AppCompatActivity {
         sender = sender_uid + receiver_uid;
         receiver = receiver_uid + sender_uid;
 
-        messageAdapter = new MessageAdapter(this, messages, sender, receiver);
+        ArrayList<messageInbox> messages = new ArrayList<>();
+        MessageAdapter messageAdapter = new MessageAdapter(this, messages, sender, receiver);
 
         binding.inboxRecyclerview.setAdapter(messageAdapter);
         binding.inboxRecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-        SetChatData();
+
 
         binding.send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +78,26 @@ public class InboxView extends AppCompatActivity {
                 messageInbox message = new messageInbox(sender_uid, chat, date.getTime());
                 binding.messagebox.setText("");
 
-                SetChatData();
+                database.getReference().child("chats")
+                        .child(sender)
+                        .child("messages").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        messages.clear();
+                        for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                            messageInbox newChat = snapshot1.getValue(messageInbox.class);
+                            newChat.setMessageId(snapshot1.getKey());
+                            messages.add(newChat);
+                        }
+                        messageAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
 
                 String key = database.getReference().push().getKey();
                 HashMap<String, Object> recentMsg = new HashMap<>();
@@ -126,31 +143,6 @@ public class InboxView extends AppCompatActivity {
 
         getSupportActionBar().setTitle(name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void SetChatData() {
-        database.getReference().child("chats")
-                .child(sender)
-                .child("messages").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messages.clear();
-                for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                    messageInbox newChat = snapshot1.getValue(messageInbox.class);
-                    newChat.setMessageId(snapshot1.getKey());
-                    messages.add(newChat);
-                }
-//                messageAdapter.notifyDataSetChanged();
-                // Changed to solve Query#4
-                messageAdapter = new MessageAdapter(InboxView.this, messages, sender, receiver);
-                binding.inboxRecyclerview.setAdapter(messageAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @Override

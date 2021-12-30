@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MessageAdapter extends RecyclerView.Adapter {
 
@@ -63,7 +62,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        holder.setIsRecyclable(false);
+
         messageInbox newMessage = messageInboxes.get(position);
         int reactions[] = new int[]{
                 R.drawable.ic_fb_like,
@@ -80,42 +79,32 @@ public class MessageAdapter extends RecyclerView.Adapter {
         ReactionPopup popup = new ReactionPopup(context, config, (positioning) -> {
             if(holder.getClass() == sentViewHolder.class){
                 sentViewHolder viewHolder = (sentViewHolder)holder;
-                if(positioning>=0) {
-                    viewHolder.binding.feelingFromSender.setImageResource(reactions[positioning]);
-                    viewHolder.binding.feelingFromSender.setVisibility(View.VISIBLE);
-                }
+                viewHolder.binding.feelingFromSender.setImageResource(reactions[positioning]);
+
+                viewHolder.binding.feelingFromSender.setVisibility(View.VISIBLE);
             }
             else{
                 receiveViewHolder viewHolder = (receiveViewHolder)holder;
-                if(positioning>=0) {
-                    viewHolder.binding.feelingFrom.setImageResource(reactions[positioning]);
-                    viewHolder.binding.feelingFrom.setVisibility(View.VISIBLE);
-                }
+                viewHolder.binding.feelingFrom.setImageResource(reactions[positioning]);
+
+                viewHolder.binding.feelingFrom.setVisibility(View.VISIBLE);
             }
 
             newMessage.setFeelings(positioning);
 
-        // HashMap to update/add(if not present) reaction field in message model
-            HashMap<String, Object> update = new HashMap<>();
-            update.put("feelings", Long.valueOf(positioning));
-
-        // Changed setValue to updateChildren to reduce time (Complete message update) and reduce data transfter
-        // Can reduce cost/expense in production app too
             FirebaseDatabase.getInstance().getReference()
                     .child("chats")
                     .child(sender)
                     .child("messages")
                     .child(newMessage.getMessageId())
-                    .updateChildren(update);
-//                    .setValue(newMessage);
+                    .setValue(newMessage);
 
             FirebaseDatabase.getInstance().getReference()
                     .child("chats")
                     .child(receiver)
                     .child("messages")
                     .child(newMessage.getMessageId())
-                    .updateChildren(update);
-//                    .setValue(newMessage);
+                    .setValue(newMessage);
 
 
             return true; // true is closing popup, false is requesting a new selection

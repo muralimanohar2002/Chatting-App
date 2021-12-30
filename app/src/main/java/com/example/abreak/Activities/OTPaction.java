@@ -47,21 +47,19 @@ public class OTPaction extends AppCompatActivity {
         binding.numView.setText("Verify " + number);
 
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(fauth)
-                .setPhoneNumber("+91"+number)
+                .setPhoneNumber(number)
                 .setActivity(OTPaction.this)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-//                        fauth.signInWithCredential(phoneAuthCredential);
-//                        Toast.makeText(getApplicationContext(), "Completed", Toast.LENGTH_SHORT).show();
+
+                        //fauth.signInWithCredential(phoneAuthCredential);
                     }
 
                     @Override
                     public void onVerificationFailed(@NonNull FirebaseException e) {
-                        Toast.makeText(getApplicationContext(), "Failed: " + e.getMessage(),Toast.LENGTH_SHORT).show();
-                        Log.d("OtpAction", "onVerificationFailed: " + e.getMessage());
-                        dial.dismiss();
+
                     }
 
                     @Override
@@ -89,7 +87,7 @@ public class OTPaction extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
                                     Toast.makeText(OTPaction.this, "Registered", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(OTPaction.this, profile.class));
+                                    startActivity(new Intent(OTPaction.this,profile.class));
                                     finishAffinity();
                                 }
                                 else{

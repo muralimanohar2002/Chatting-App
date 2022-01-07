@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
+       @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-    }
+   }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

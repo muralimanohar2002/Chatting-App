@@ -75,27 +75,27 @@ public class OTPaction extends AppCompatActivity {
                     }
                 }).build();
 
-                PhoneAuthProvider.verifyPhoneNumber(options);
+        PhoneAuthProvider.verifyPhoneNumber(options);
 
-                binding.otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
+        binding.otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
+            @Override
+            public void onOtpCompleted(String otp) {
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verifyId,otp);
+
+                fauth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onOtpCompleted(String otp) {
-                        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verifyId,otp);
-
-                        fauth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(OTPaction.this, "Registered", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(OTPaction.this,profile.class));
-                                    finishAffinity();
-                                }
-                                else{
-                                    Toast.makeText(OTPaction.this, "Failed", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(OTPaction.this, "Registered", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(OTPaction.this,profile.class));
+                            finishAffinity();
+                        }
+                        else{
+                            Toast.makeText(OTPaction.this, "Failed", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
+            }
+        });
     }
 }

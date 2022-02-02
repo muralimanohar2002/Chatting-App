@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -74,58 +75,62 @@ public class InboxView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String chat = binding.messagebox.getText().toString();
-                Date date = new Date();
-                messageInbox message = new messageInbox(sender_uid, chat, date.getTime());
-                binding.messagebox.setText("");
+                if (TextUtils.isEmpty(chat)){
+                    Toast.makeText(InboxView.this, "Enter something to send..", Toast.LENGTH_SHORT).show();
+                }else{
+                    Date date = new Date();
+                    messageInbox message = new messageInbox(sender_uid, chat, date.getTime());
+                    binding.messagebox.setText("");
 
-                database.getReference().child("chats")
-                        .child(sender)
-                        .child("messages").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        messages.clear();
-                        for(DataSnapshot snapshot1 : snapshot.getChildren()){
-                            messageInbox newChat = snapshot1.getValue(messageInbox.class);
-                            newChat.setMessageId(snapshot1.getKey());
-                            messages.add(newChat);
-                        }
-                        messageAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-
-                String key = database.getReference().push().getKey();
-                HashMap<String, Object> recentMsg = new HashMap<>();
-                recentMsg.put("recentmsg", message.getMessage());
-                recentMsg.put("recentmsgTime", date.getTime());
-
-                database.getReference().child("chats").child(sender).updateChildren(recentMsg);
-                database.getReference().child("chats").child(receiver).updateChildren(recentMsg);
-                database.getReference().child("chats")
-                        .child(sender)
-                        .child("messages")
-                        .child(key)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                database.getReference().child("chats")
-                                        .child(receiver)
-                                        .child("messages")
-                                        .child(key)
-                                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void bVoid) {
-
-                                            }
-                                        });
-
+                    database.getReference().child("chats")
+                            .child(sender)
+                            .child("messages").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            messages.clear();
+                            for(DataSnapshot snapshot1 : snapshot.getChildren()){
+                                messageInbox newChat = snapshot1.getValue(messageInbox.class);
+                                newChat.setMessageId(snapshot1.getKey());
+                                messages.add(newChat);
                             }
-                        });
+                            messageAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+                    String key = database.getReference().push().getKey();
+                    HashMap<String, Object> recentMsg = new HashMap<>();
+                    recentMsg.put("recentmsg", message.getMessage());
+                    recentMsg.put("recentmsgTime", date.getTime());
+
+                    database.getReference().child("chats").child(sender).updateChildren(recentMsg);
+                    database.getReference().child("chats").child(receiver).updateChildren(recentMsg);
+                    database.getReference().child("chats")
+                            .child(sender)
+                            .child("messages")
+                            .child(key)
+                            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            database.getReference().child("chats")
+                                    .child(receiver)
+                                    .child("messages")
+                                    .child(key)
+                                    .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void bVoid) {
+
+                                }
+                            });
+
+                        }
+                    });
+                }
             }
         });
 
